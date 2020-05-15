@@ -7,7 +7,7 @@ const Header = () => {
   /*  const history = useHistory(); */
 
   return (
-    <header>
+    <header className="fixed">
       {/* HEADER BLOCK 1 : LOGO + ASIDE ------------------------------*/}
       <div>
         <nav className="container">

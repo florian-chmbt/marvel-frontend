@@ -124,9 +124,15 @@ menu > div > div {
   background-color: white;
 }
 
-.Search {
+/* .Search {
   display: flex;
   justify-content: space-between;
+} */
+.SearchBar {
+  height: 40px;
+  width: 600px;
+  background-color: beige;
+  margin-left: 20px;
 }
 
 figure > div > div {
@@ -151,4 +157,16 @@ figure {
 .aa {
   flex-shrink: 0; /* par default */
   display: inherit;
+}
+
+.fixed {
+  position: sticky; /* ne fonctionne pas => a revoir*/
+  /* position: fixed; */
+  /* top: 0px; */
+  /* width: 100%; */
+}
+
+main {
+  /* position: static;
+  top: -100px; */
 }

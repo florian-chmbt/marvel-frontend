@@ -19,8 +19,8 @@ function ComcisById() {
   // REQUETE CRUD READ = RECUPERER LISTE DES CHARACTERES ------------------------------------------------------
   const fetchData = async () => {
     const response = await axios.get(
-      //   "http://localhost:3001/comicsbyid"
-      `http://localhost:3001/comicsbyid/${idToto}`
+      // `http://localhost:3001/comicsbyid/${idToto}`
+      `https://marvel-fc.herokuapp.com/comicsbyid/${idToto}`
     );
 
     // console.log(response.data); // => obj API

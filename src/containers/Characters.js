@@ -45,7 +45,10 @@ function Characters() {
 
   // REQUETE CRUD READ = RECUPERER LISTE DES CHARACTERES ------------------------------------------------------
   const fetchData = async () => {
-    const response = await axios.get("http://localhost:3001/characters" + page);
+    const response = await axios.get(
+      // "http://localhost:3001/characters" + page
+      "https://marvel-fc.herokuapp.com/characters" + page
+    );
 
     // console.log(response.data); // => obj API
     // console.log(response.data.total); // => 1493

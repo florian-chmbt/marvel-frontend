@@ -13,6 +13,7 @@ function Comics() {
   const [results, setResults] = useState(characters);
   // const [results, setResults] = useState(characters.slice(0, 10));
   const [search, setSearch] = useState("");
+  const [search2, setSearch2] = useState("");
 
   // VARIABLES GESTION DES PAGES -----------------------------------------------------------------------
   // const tabTest = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
@@ -31,21 +32,42 @@ function Comics() {
   // RECUPERER LE DERNIER CHAR DE LA STRING STATE ------------------------------------------------------
   // console.log(typeof page); // => "string"
   // * Methode 1
-  const numPage1 = page;
-  const lastChar1 = numPage1.charAt(numPage1.length - 1); // => "1"
-  console.log(lastChar1);
-  // * Methode 2
-  var numPage2 = page;
-  var lastChar2 = numPage2.substr(numPage2.length - 1); // => "1"
-  console.log(lastChar2);
-  // * Methode 3
-  var numPage3 = page;
-  var lastChar3 = numPage3.split("=").pop(); // => "11"
-  console.log(lastChar3);
 
-  // REQUETE CRUD READ = RECUPERER LISTE DES CHARACTERES ------------------------------------------------------
+  const handleQuery = () => {
+    // console.log(handleQuery);
+    let str = "?";
+    console.log(str);
+    if (page) {
+      str += "page=" + page;
+      console.log(str);
+    }
+    if (search) {
+      // si str n'est pas modifié (aucun query avant)
+      if (str === "?") {
+        str += "sort=" + search;
+      } else {
+        str += "&sort=" + search;
+      }
+      console.log(str);
+    }
+    // si aucune query
+    if (str === "?") {
+      return "";
+      // si query :
+    } else {
+      return str;
+    }
+  };
+
+  // REQUETE CRUD READ = RECUPERER LISTE DES COMICS ------------------------------------------------------
   const fetchData = async () => {
-    const response = await axios.get("http://localhost:3001/comics" + page);
+    const query = handleQuery();
+    console.log(query);
+    console.log("http://localhost:3001/comics" + query);
+    const response = await axios.get(
+      "https://marvel-fc.herokuapp.com/comics" + query
+      // "https://marvel-fc.herokuapp.com/comics" + page
+    );
 
     // console.log(response.data); // => obj API
     // console.log(response.data.total); // => 1493
@@ -88,7 +110,7 @@ function Comics() {
   useEffect(() => {
     console.log("Fetching Data");
     fetchData();
-  }, [page]);
+  }, [page, search2]);
 
   return (
     <>
@@ -135,7 +157,6 @@ function Comics() {
           {/* 2) METHODE BALISE BOUTON*/}
           {/* faire une condition pour afficher page 1 si state est falsy */}
           <figure>
-            <div>Page : {lastChar3}</div>
             <div className="bb">
               {newTab.map((item) => {
                 return (
@@ -145,7 +166,7 @@ function Comics() {
                         className="aa"
                         key={item}
                         onClick={(event) => {
-                          setPage("?page=" + item);
+                          setPage(item);
                         }}
                       >
                         {item}
@@ -166,14 +187,9 @@ function Comics() {
                   event.preventDefault();
                 }}
               >
-                <input type="submit" value="Rechercher" />
+                <input type="submit" value="Rechercher sur la page" />
                 <input
-                  style={{
-                    height: "40px",
-                    width: "600px",
-                    backgroundColor: "beige",
-                    marginLeft: "20px",
-                  }}
+                  className="SearchBar"
                   placeholder="Tapez recherche"
                   type="text"
                   onChange={(event) => {
@@ -183,12 +199,35 @@ function Comics() {
               </form>
             </div>
             <br />
+            <div>
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  setSearch2(search);
+                  setPage("");
+                }}
+              >
+                <input
+                  type="submit"
+                  value=" Recherche par titre sur toutes les pages "
+                />
+                <input
+                  className="SearchBar"
+                  placeholder="Tapez recherche"
+                  type="text"
+                  onChange={(event) => {
+                    setSearch(event.target.value);
+                  }}
+                />
+              </form>
+            </div>
             {/* <div>
-              Recherche par non :
+              Recherche par titre sur toutes les pages :
               <input
+                className="SearchBar"
                 type="text"
                 onChange={(event) => {
-                  searchResult(event);
+                  setSearch(event.target.value);
                 }}
               />
             </div> */}

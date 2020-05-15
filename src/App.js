@@ -20,6 +20,7 @@ function App() {
   return (
     <Router>
       <Header />
+
       <main>
         <Switch>
           {/* ROUTE COMICS BY ID ------------------------------------------------- */}
