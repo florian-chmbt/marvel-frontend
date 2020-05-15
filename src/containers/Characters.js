@@ -13,6 +13,7 @@ function Characters() {
   const [results, setResults] = useState(characters);
   // const [results, setResults] = useState(characters.slice(0, 10));
   const [search, setSearch] = useState("");
+  const [search2, setSearch2] = useState("");
 
   // VARIABLES GESTION DES PAGES -----------------------------------------------------------------------
   // const tabTest = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
@@ -28,26 +29,42 @@ function Characters() {
   }
   // console.log(newTab); // => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
-  // RECUPERER LE DERNIER CHAR DE LA STRING STATE ------------------------------------------------------
-  // console.log(typeof page); // => "string"
-  // * Methode 1
-  const numPage1 = page;
-  const lastChar1 = numPage1.charAt(numPage1.length - 1); // => "1"
-  console.log(lastChar1);
-  // * Methode 2
-  var numPage2 = page;
-  var lastChar2 = numPage2.substr(numPage2.length - 1); // => "1"
-  console.log(lastChar2);
-  // * Methode 3
-  var numPage3 = page;
-  var lastChar3 = numPage3.split("=").pop(); // => "11"
-  console.log(lastChar3);
+  // FONCTION : GESTION DES QUERIES  ------------------------------------------------------
+
+  const handleQuery = () => {
+    // console.log(handleQuery);
+    let str = "?";
+    console.log(str);
+    if (page) {
+      str += "page=" + page;
+      console.log(str);
+    }
+    if (search) {
+      // si str n'est pas modifié (aucun query avant)
+      if (str === "?") {
+        str += "search=" + search;
+      } else {
+        str += "&search=" + search;
+      }
+      console.log(str);
+    }
+    // si aucune query
+    if (str === "?") {
+      return "";
+      // si query :
+    } else {
+      return str;
+    }
+  };
 
   // REQUETE CRUD READ = RECUPERER LISTE DES CHARACTERES ------------------------------------------------------
   const fetchData = async () => {
+    const query = handleQuery();
+    console.log(query);
+    console.log("http://localhost:3001/comics" + query);
     const response = await axios.get(
-      // "http://localhost:3001/characters" + page
-      "https://marvel-fc.herokuapp.com/characters" + page
+      // "http://localhost:3001/characters" + query
+      "https://marvel-fc.herokuapp.com/characters" + query
     );
 
     // console.log(response.data); // => obj API
@@ -59,7 +76,6 @@ function Characters() {
     setTotal(response.data.total);
     setLimit(response.data.limit);
     setIsLoading(false);
-    // setPage(page);
 
     // forcer le rafraichissement pour que tous les perso s'affiche avec le map non plus sur le state "characters" mais sur "results"
     setResults(response.data.results);
@@ -67,24 +83,30 @@ function Characters() {
 
   // VARIABLES GESTION DES FILTRES NAME/TITLE ------------------------------------------------------
   // fonction qui va être appelée à chaque modification dans l'input de recherche qui retourne un tableau de resultats
-  const searchResult = (event) => {
-    let newResults = [];
-    for (let i = 0; i < characters.length; i++) {
-      if (
-        characters[i].name
-          .toLowerCase()
-          .indexOf(event.target.value.toLowerCase()) !== -1
-      ) {
-        newResults.push(characters[i]);
-      }
-    }
-    setResults(newResults);
-  };
+  // const searchResult = (event) => {
+  //   let newResults = [];
+  //   for (let i = 0; i < characters.length; i++) {
+  //     if (
+  //       characters[i].name
+  //         .toLowerCase()
+  //         .indexOf(event.target.value.toLowerCase()) !== -1
+  //     ) {
+  //       if (newResults.length >= 100) {
+  //         break;
+  //         setResults(characters);
+  //       } else {
+  //         newResults.push(characters[i]);
+  //       }
+  //     }
+  //   }
+  //   setResults(newResults);
+  // };
 
   useEffect(() => {
     console.log("Fetching Data");
     fetchData();
-  }, [page]);
+    // déclanche la requette axios a chaque maj des states dans le tableau (rafraichissement de page)
+  }, [page, search2]);
 
   return (
     <>
@@ -97,7 +119,7 @@ function Characters() {
             <div>Nombre de SuperHeros : {data.total}</div>
             <div>Nombre total de résultats affichés : {data.count}</div>
           </div>
-
+          {/*  */}
           {/* TEST DES CLE DE OBJ DATA ------------------------------------------------------------*/}
           {/* <div>{characters.results[0].name}</div>
           <div>{characters.results[0].id}</div>
@@ -105,9 +127,9 @@ function Characters() {
           {/* <img
             src={characters.results[0].thumbnail.path}
           /> */}
-
+          {/*  */}
           {/* FILTRE SUR PAGNIATION -------------------------------------------------------------------*/}
-
+          {/*  */}
           {/* 1) METHODE BALISE FORM*/}
           {/* <div>
             <form
@@ -127,17 +149,17 @@ function Characters() {
               ></input>
             </form>
           </div> */}
-
+          {/*  */}
           {/* 2) METHODE BALISE BOUTON*/}
           {/* faire une condition pour afficher page 1 si state est falsy */}
           <figure>
-            <div>Page : {lastChar3}</div>
-            {newTab.map((item) => {
+            <div>Page : {page}</div>
+            {newTab.map((item, index) => {
               return (
                 <button
-                  key={item}
+                  key={index}
                   onClick={(event) => {
-                    setPage("?page=" + item);
+                    setPage(item);
                   }}
                 >
                   {item}
@@ -145,46 +167,51 @@ function Characters() {
               );
             })}
           </figure>
-
           {/* FILTRE SUR TITRE ET NOM-------------------------------------------------------------*/}
           {/* faire une condition pour afficher tous les résultats quand barre de recherche vide*/}
+          {/* A METTRE EN COMPOSANT "SEARCH" */}
+          {/*  1) METHODE indexof --------------------- */}
+          {/* <div>
+            Rechercher sur la page :
+            <input
+              className="SearchBar"
+              type="text"
+              placeholder="Tapez recherche"
+              onChange={(event) => {
+                searchResult(event);
+              }}
+            />
+          </div> */}
+          <br />
+          {/*  2) METHODE indexof --------------------- */}
           <div className="Search">
+            <div>Recherche par titre sur toutes les pages </div>
             <div>
               <form
                 onSubmit={(event) => {
                   event.preventDefault();
+                  setSearch2(search);
+                  setPage("");
                 }}
               >
-                <input type="submit" value="Rechercher" />
                 <input
-                  style={{
-                    height: "40px",
-                    width: "600px",
-                    backgroundColor: "beige",
-                    marginLeft: "20px",
-                  }}
+                  style={{ marginLeft: "10px" }}
+                  type="submit"
+                  value=" Rechercher"
+                />
+                <input
+                  className="SearchBar"
                   placeholder="Tapez recherche"
                   type="text"
                   onChange={(event) => {
-                    searchResult(event);
+                    setSearch(event.target.value);
                   }}
                 />
               </form>
             </div>
-            <br />
-            {/* <div>
-              Recherche par non :
-              <input
-                type="text"
-                onChange={(event) => {
-                  searchResult(event);
-                }}
-              />
-            </div> */}
           </div>
 
           {/* Rafraichir la page pour forcer l'affichage des perso (resultas des filtre nom) */}
-
           {/* LSITE DES PERSO ----------------------------------------------------------------------*/}
           {results.map((character, index) => {
             //  {results.map((character, index) => {

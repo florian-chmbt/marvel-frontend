@@ -124,10 +124,11 @@ menu > div > div {
   background-color: white;
 }
 
-/* .Search {
+.Search {
   display: flex;
-  justify-content: space-between;
-} */
+  /* justify-content: space-around; */
+  align-items: center;
+}
 .SearchBar {
   height: 40px;
   width: 600px;

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 function Comics() {
   const [data, setData] = useState();
   // attention : penser à mettre les crochets dans le state caracters pour le filtre sur nom
-  const [characters, setCharacters] = useState([]);
+  const [comics, setComics] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState("");
   const [limit, setLimit] = useState("");
   const [total, setTotal] = useState("");
-  const [results, setResults] = useState(characters);
-  // const [results, setResults] = useState(characters.slice(0, 10));
+  const [results, setResults] = useState(comics);
+  // const [results, setResults] = useState(comics.slice(0, 10));
   const [search, setSearch] = useState("");
   const [search2, setSearch2] = useState("");
 
@@ -29,9 +29,7 @@ function Comics() {
   }
   // console.log(newTab); // => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
-  // RECUPERER LE DERNIER CHAR DE LA STRING STATE ------------------------------------------------------
-  // console.log(typeof page); // => "string"
-  // * Methode 1
+  // FONCTION : GESTION DES QUERIES  ------------------------------------------------------
 
   const handleQuery = () => {
     // console.log(handleQuery);
@@ -44,9 +42,9 @@ function Comics() {
     if (search) {
       // si str n'est pas modifié (aucun query avant)
       if (str === "?") {
-        str += "sort=" + search;
+        str += "search=" + search;
       } else {
-        str += "&sort=" + search;
+        str += "&search=" + search;
       }
       console.log(str);
     }
@@ -65,8 +63,8 @@ function Comics() {
     console.log(query);
     console.log("http://localhost:3001/comics" + query);
     const response = await axios.get(
+      // "http://localhost:3001/comics" + query
       "https://marvel-fc.herokuapp.com/comics" + query
-      // "https://marvel-fc.herokuapp.com/comics" + page
     );
 
     // console.log(response.data); // => obj API
@@ -74,42 +72,40 @@ function Comics() {
     console.log(response.data.results); // => [tableau avec liste des perso en elet de type obj]
 
     setData(response.data);
-    setCharacters(response.data.results);
+    setComics(response.data.results);
     setTotal(response.data.total);
     setLimit(response.data.limit);
     setIsLoading(false);
-    // setPage(page);
 
-    // forcer le rafraichissement pour que tous les perso s'affiche avec le map non plus sur le state "characters" mais sur "results"
+    // forcer le rafraichissement pour que tous les perso s'affiche avec le map non plus sur le state "comics" mais sur "results"
     setResults(response.data.results);
   };
 
   // VARIABLES GESTION DES FILTRES NAME/TITLE ------------------------------------------------------
   // fonction qui va être appelée à chaque modification dans l'input de recherche qui retourne un tableau de resultats
-  const searchResult = (event) => {
-    let newResults = [];
-    for (let i = 0; i < characters.length; i++) {
-      if (
-        characters[i].title
-          .toLowerCase()
-          .indexOf(event.target.value.toLowerCase()) !== -1
-      ) {
-        // if (!event.target.value) {
-        //   newResults.push(characters[i]);
-        if (newResults.length >= 100) {
-          break;
-          setResults(characters);
-        } else {
-          newResults.push(characters[i]);
-        }
-      }
-    }
-    setResults(newResults);
-  };
+  // const searchResult = (event) => {
+  //   let newResults = [];
+  //   for (let i = 0; i < comics.length; i++) {
+  //     if (
+  //       comics[i].title
+  //         .toLowerCase()
+  //         .indexOf(event.target.value.toLowerCase()) !== -1
+  //     ) {
+  //       if (newResults.length >= 100) {
+  //         break;
+  //         setResults(comics);
+  //       } else {
+  //       newResults.push(comics[i]);
+  //     }
+  //     }
+  //   }
+  //   setResults(newResults);
+  // };
 
   useEffect(() => {
     console.log("Fetching Data");
     fetchData();
+    // déclanche la requette axios a chaque maj des states dans le tableau (rafraichissement de page)
   }, [page, search2]);
 
   return (
@@ -125,11 +121,11 @@ function Comics() {
           </div>
 
           {/* TEST DES CLE DE OBJ DATA ------------------------------------------------------------*/}
-          {/* <div>{characters.results[0].name}</div>
-          <div>{characters.results[0].id}</div>
-          <div>{characters.results[0].description}</div> */}
+          {/* <div>{comics.results[0].name}</div>
+          <div>{comics.results[0].id}</div>
+          <div>{comics.results[0].description}</div> */}
           {/* <img
-            src={characters.results[0].thumbnail.path}
+            src={comics.results[0].thumbnail.path}
           /> */}
 
           {/* FILTRE SUR PAGNIATION -------------------------------------------------------------------*/}
@@ -157,14 +153,14 @@ function Comics() {
           {/* 2) METHODE BALISE BOUTON*/}
           {/* faire une condition pour afficher page 1 si state est falsy */}
           <figure>
+            <div>Page : {page}</div>
             <div className="bb">
-              {newTab.map((item) => {
+              {newTab.map((item, index) => {
                 return (
-                  <div className="aa">
+                  <div className="aa" key={index}>
                     <div>
                       <button
                         className="aa"
-                        key={item}
                         onClick={(event) => {
                           setPage(item);
                         }}
@@ -180,25 +176,27 @@ function Comics() {
 
           {/* FILTRE SUR TITRE ET NOM-------------------------------------------------------------*/}
           {/* faire une condition pour afficher tous les résultats quand barre de recherche vide*/}
+          {/* A METTRE EN COMPOSANT "SEARCH" */}
+
+          {/*  1) METHODE indexof --------------------- */}
+
+          {/* <div>
+            Rechercher sur la page :
+            <input
+              className="SearchBar"
+              type="text"
+              placeholder="Tapez recherche"
+              onChange={(event) => {
+                searchResult(event);
+              }}
+            />
+          </div> */}
+          <br />
+
+          {/*  2) METHODE indexof --------------------- */}
+
           <div className="Search">
-            <div>
-              <form
-                onSubmit={(event) => {
-                  event.preventDefault();
-                }}
-              >
-                <input type="submit" value="Rechercher sur la page" />
-                <input
-                  className="SearchBar"
-                  placeholder="Tapez recherche"
-                  type="text"
-                  onChange={(event) => {
-                    searchResult(event);
-                  }}
-                />
-              </form>
-            </div>
-            <br />
+            <div>Recherche par titre sur toutes les pages </div>
             <div>
               <form
                 onSubmit={(event) => {
@@ -208,8 +206,9 @@ function Comics() {
                 }}
               >
                 <input
+                  style={{ marginLeft: "10px" }}
                   type="submit"
-                  value=" Recherche par titre sur toutes les pages "
+                  value=" Rechercher"
                 />
                 <input
                   className="SearchBar"
@@ -221,52 +220,36 @@ function Comics() {
                 />
               </form>
             </div>
-            {/* <div>
-              Recherche par titre sur toutes les pages :
-              <input
-                className="SearchBar"
-                type="text"
-                onChange={(event) => {
-                  setSearch(event.target.value);
-                }}
-              />
-            </div> */}
           </div>
 
           {/* Rafraichir la page pour forcer l'affichage des perso (resultas des filtre nom) */}
 
           {/* LSITE DES PERSO ----------------------------------------------------------------------*/}
-          {results.map((character, index) => {
-            //  {characters.map((character, index) => {
+          {results.map((character) => {
+            //  {comics.map((character, index) => {
             return (
-              <Link
-                className="Link"
-                style={{ textDecoration: "none" }}
-                to={`/comics${characters.id}`}
-              >
-                <article key={character.id}>
-                  <h2>{character.title}</h2>
+              <article key={character.id}>
+                <h2>{character.title}</h2>
+                <div>
                   <div>
-                    <div>
-                      <img
-                        src={
-                          character.thumbnail.path +
-                          "." +
-                          character.thumbnail.extension
-                        }
-                        alt={character.title}
-                      />
-                    </div>
-                    <div>
-                      {/* <h3>Description</h3>
-                    <p>{character.description}</p> */}
-                      <div>Description</div>
-                      <br />
-                      <p>{character.description}</p>
-                    </div>
+                    <img
+                      src={
+                        character.thumbnail.path +
+                        "." +
+                        character.thumbnail.extension
+                      }
+                      alt={character.title}
+                    />
                   </div>
-                </article>
-              </Link>
+                  <div>
+                    {/* <h3>Description</h3>
+                    <p>{character.description}</p> */}
+                    <div>Description</div>
+                    <br />
+                    <p>{character.description}</p>
+                  </div>
+                </div>
+              </article>
             );
           })}
         </section>
