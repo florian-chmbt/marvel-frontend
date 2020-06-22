@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+// import composants
+import Loader from "../components/Loader";
 
 function Characters() {
   const [data, setData] = useState();
@@ -63,8 +65,8 @@ function Characters() {
     console.log(query);
     console.log("http://localhost:3001/comics" + query);
     const response = await axios.get(
-      // "http://localhost:3001/characters" + query
-      "https://marvel-fc.herokuapp.com/characters" + query
+      "http://localhost:3001/characters" + query
+      // "https://marvel-fc.herokuapp.com/characters" + query
     );
 
     // console.log(response.data); // => obj API
@@ -111,23 +113,19 @@ function Characters() {
   return (
     <>
       {isLoading ? (
-        <p>loading... Please Wait !</p>
+        // <p>loading... Please Wait !</p>
+        <Loader />
       ) : (
         <section className="container">
-          <h1>MARVEL CHARACTERS</h1>
+          <h1>MARVEL CHARACTERS florian</h1>
           <div className="infoPage">
             <div>Nombre de SuperHeros : {data.total}</div>
             <div>Nombre total de résultats affichés : {data.count}</div>
           </div>
-          {/*  */}
+
           {/* TEST DES CLE DE OBJ DATA ------------------------------------------------------------*/}
           {/* <div>{characters.results[0].name}</div>
-          <div>{characters.results[0].id}</div>
-          <div>{characters.results[0].description}</div> */}
-          {/* <img
-            src={characters.results[0].thumbnail.path}
-          /> */}
-          {/*  */}
+   
           {/* FILTRE SUR PAGNIATION -------------------------------------------------------------------*/}
           {/*  */}
           {/* 1) METHODE BALISE FORM*/}
@@ -223,7 +221,10 @@ function Characters() {
               >
                 <article key={character.id}>
                   <h2>{character.name}</h2>
+                  {/* CARD CARACTERS DETAIL--------------------- */}
+                  {/* -> enfant direct */}
                   <div>
+                    {/* -> enfant direct nth(2) */}
                     <div>
                       <img
                         src={
@@ -235,13 +236,13 @@ function Characters() {
                       />
                     </div>
                     <div>
-                      {/* <h3>Description</h3>
-                    <p>{character.description}</p> */}
                       <div>Description</div>
-                      <br />
-                      <p>{character.description}</p>
+                      {/* -> enfant direct nth(3) */}
+                      <div>{character.description}</div>
+                      {/* <p>{character.description}</p> */}
                     </div>
                   </div>
+                  {/* FIN CARD CARACTERS DETAIL--------------------- */}
                 </article>
               </Link>
             );

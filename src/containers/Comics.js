@@ -63,8 +63,8 @@ function Comics() {
     console.log(query);
     console.log("http://localhost:3001/comics" + query);
     const response = await axios.get(
-      // "http://localhost:3001/comics" + query
-      "https://marvel-fc.herokuapp.com/comics" + query
+      "http://localhost:3001/comics" + query
+      // "https://marvel-fc.herokuapp.com/comics" + query
     );
 
     // console.log(response.data); // => obj API
@@ -121,12 +121,7 @@ function Comics() {
           </div>
 
           {/* TEST DES CLE DE OBJ DATA ------------------------------------------------------------*/}
-          {/* <div>{comics.results[0].name}</div>
-          <div>{comics.results[0].id}</div>
-          <div>{comics.results[0].description}</div> */}
-          {/* <img
-            src={comics.results[0].thumbnail.path}
-          /> */}
+          {/* <div>{comics.results[0].name}</div>*/}
 
           {/* FILTRE SUR PAGNIATION -------------------------------------------------------------------*/}
 
@@ -230,7 +225,10 @@ function Comics() {
             return (
               <article key={character.id}>
                 <h2>{character.title}</h2>
+                {/* CARD COMICS DETAIL--------------------- */}
+                {/* -> enfant direct */}
                 <div>
+                  {/* -> enfant direct nth(2) */}
                   <div>
                     <img
                       src={
@@ -238,17 +236,17 @@ function Comics() {
                         "." +
                         character.thumbnail.extension
                       }
-                      alt={character.title}
+                      alt={character.name}
                     />
                   </div>
                   <div>
-                    {/* <h3>Description</h3>
-                    <p>{character.description}</p> */}
                     <div>Description</div>
-                    <br />
-                    <p>{character.description}</p>
+                    {/* -> enfant direct nth(3) */}
+                    <div>{character.description}</div>
+                    {/* <p>{character.description}</p> */}
                   </div>
                 </div>
+                {/* FIN CARD COMICS DETAIL--------------------- */}
               </article>
             );
           })}

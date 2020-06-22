@@ -5,55 +5,126 @@ body {
   width: 1200px;
   margin: 0 auto;
 }
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* ARTICLE = CARD CHARACTERS / COMICS -------------------------------------*/
+
+/* DIV TEMOIN POUR TESTER LES PSEUDOCLASS ET VISEUR*/
+/* div {
+  background-color: black;
+  width: 50px;
+  height: 50px;
+} */
 article {
-  /* height: 200px; */
-  /* width: 1000px; */
+  width: 1200px; /* -> width of : (P<>) .container / -> width defbydefaultby : (P<>) .container / */
   border: solid 1px;
   margin-top: 10px;
   padding: 5px;
   box-sizing: border-box;
   background-color: lightgray;
 }
+/* A1 -> enfant direct */
 article > div {
   display: flex;
-  width: 1000px;
-  /* background-color: tomato; */
+  width: 1150px;
+  /* background-color: turquoise; */
 }
+/* B1 et B2 -> enfant direct */
+article div div {
+  /* background-color: green; */
+  width: 950px;
+}
+/* C1 et C2 -> enfant direct */
+article div div div {
+  /* background-color: hotpink; */
+  width: 900px;
+}
+
+/* B1 */
+/* B1 et C1-> chaque 1er enfant descendant de l'elem parent -> 1er enfant, 1er petit enfant ...*/
+article div div:first-child {
+  /* background: red; */
+  width: 120px;
+  margin-right: 50px;
+}
+
+/* Comment viser seulement "B1" le 1er enfant direct de "A1" sans impacter les 1er autres descendants (petit enfant, arriere petit enfant..) ??????????????????????????????????... /*
+/*-------------------------------------------------------
+article div div:first-child  { -> Définit tous les éléments `p` enfants de `div`. 
+article div div:nth-child(1) { -> Définit tous les éléments `p` enfants de `div`. 
+article div > div { -> Définit tous les éléments `p` enfants de `div`. 
+article div + div { -> Définit le premier élément `p` positionné directement après `div` et ayant le même parent.
+article div ~ div { -> Définit tous les éléments `p` positionnés directement après `div` et ayant le même parent.
+----------------------------------------------------------------------------------------------------------------*/
+
+/* C1-> chaque 1er petit enfant descendant de l'elem parent -> 1er enfant, 1er petit enfant ...*/
+article div div div:first-child {
+  /* background-color: yellow; */
+  width: 400px; /* -> width defbydefaultby : (P<>) B2 */
+  margin-bottom: 10px;
+}
+
+/* C2-> chaque deuxième élément de son parent */
+article div div div:nth-child(2) {
+  /* background-color: blue; */
+  /* height: 200px; */
+}
+
 article img {
   width: 120px;
   height: 120px;
   object-fit: cover;
 }
 
-article div:first-child {
-  /* background: red; */
-  width: 101px;
-}
-article div:nth-child(2) {
-  /* background: white; */
-  width: 900px;
-}
-article div div:nth-child(2) {
-  /* background-color: tomato; */
-  margin-left: 50px;
-}
-p {
-  /* background-color: thistle; */
-  width: 650px;
-  margin-top: 0px;
-}
-h3 {
-  /* background-color: thistle; */
-  width: 650px;
-  margin-left: 50px;
-}
-
+/* NAVIGATION MENU --------------------------------------------------------- */
 .infoPage {
   display: flex;
   justify-content: space-between;
 }
 
-/* HEADER ----------------------------------------- */
+.Search {
+  display: flex;
+  /* justify-content: space-around; */
+  align-items: center;
+}
+.SearchBar {
+  height: 40px;
+  width: 600px;
+  background-color: beige;
+  margin-left: 20px;
+}
+
+figure > div > div {
+  flex: none;
+}
+
+figure {
+  display: flex;
+  justify-content: space-around;
+  width: 1200px;
+}
+.scroll {
+  /* display: flex; */
+  width: 300px;
+}
+.bb {
+  display: flex;
+  flex-wrap: nowrap; /* par default */
+  overflow: hidden;
+  overflow-x: auto;
+}
+.aa {
+  flex-shrink: 0; /* (1) par default, (O) permet d'empecher le retrécissement */
+  display: inherit;
+}
+
+/* HEADER --------------------------------------------------------- */
 header {
   height: 95px;
   background-color: black;
@@ -104,6 +175,25 @@ menu > div > div {
   color: white;
 }
 
+.fixed {
+  position: sticky; /* ne fonctionne pas => a revoir*/
+  /* HEADER FIXE */
+  /* position: fixed; */
+  /* ETIRE LE HEADER SUR LA LARGEUR DE LA PAGE */
+  width: 100vw;
+  /* AFFIHCER LE HEADER EN HAUT, SI DECLARE EN BAS DU CODE HTML */
+  top: 0;
+  left: 0;
+  right: 0;
+  /* EMPECHE LE BALISE "PARENT DE DEPASSER SUR LE HEADER FIXE */
+  /* z-index: 99; */
+}
+
+main {
+  /* position: static;
+  top: -100px; */
+}
+
 /* LINK----------------------------------------- */
 .Link {
   font-size: 20px;
@@ -122,52 +212,4 @@ menu > div > div {
   padding: 10px;
   box-sizing: border-box;
   background-color: white;
-}
-
-.Search {
-  display: flex;
-  /* justify-content: space-around; */
-  align-items: center;
-}
-.SearchBar {
-  height: 40px;
-  width: 600px;
-  background-color: beige;
-  margin-left: 20px;
-}
-
-figure > div > div {
-  flex: none;
-}
-
-figure {
-  display: flex;
-  justify-content: space-around;
-  width: 1200px;
-}
-.scroll {
-  /* display: flex; */
-  width: 300px;
-}
-.bb {
-  display: flex;
-  flex-wrap: nowrap; /* par default */
-  overflow: hidden;
-  overflow-x: auto;
-}
-.aa {
-  flex-shrink: 0; /* par default */
-  display: inherit;
-}
-
-.fixed {
-  position: sticky; /* ne fonctionne pas => a revoir*/
-  /* position: fixed; */
-  /* top: 0px; */
-  /* width: 100%; */
-}
-
-main {
-  /* position: static;
-  top: -100px; */
 }
